@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreeR - Racikan . Ramuan . Rahma</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Outfit for futuristic UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-yellow': '#facc15',
+                        'neon-gold': '#ffd700',
+                        'neon-pink': '#ff007f',
+                        'neon-magenta': '#d946ef',
+                        'dark-bg': '#09090b',
+                        'dark-card': '#121215',
+                    },
+                    fontFamily: {
+                        'outfit': ['Outfit', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Outfit', 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Pill Container Neon Borders */
+        .neon-pill-yellow {
+            border: 2px solid #facc15;
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.35);
+        }
+
+        .neon-pill-gradient {
+            border: 2px solid transparent;
+            background: linear-gradient(#09090b, #09090b) padding-box,
+                        linear-gradient(90deg, #facc15, #e879f9, #d946ef) border-box;
+            box-shadow: 0 0 20px rgba(217, 70, 239, 0.25);
+        }
+
+        /* Card Yellow Border Glow */
+        .card-yellow {
+            border: 2px solid #facc15;
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.25);
+            transition: all 0.3s ease;
+        }
+        .card-yellow:hover {
+            box-shadow: 0 0 35px rgba(250, 204, 21, 0.45);
+            transform: translateY(-4px);
+        }
+
+        /* Card Pink/Magenta Border Glow */
+        .card-pink {
+            border: 2px solid #d946ef;
+            box-shadow: 0 0 20px rgba(217, 70, 239, 0.25);
+            transition: all 0.3s ease;
+        }
+        .card-pink:hover {
+            box-shadow: 0 0 35px rgba(217, 70, 239, 0.45);
+            transform: translateY(-4px);
+        }
+
+        /* Modal Overlay Styling */
+        .modal-blur {
+            backdrop-filter: blur(8px);
+            background-color: rgba(0, 0, 0, 0.75);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #facc15;
+        }
+
+        /* Subtle Bounce Effect */
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .pulse-hover:hover {
+            animation: pulse-slow 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-3 md:p-6 antialiased">
+
+    <!-- MAIN CONTAINER -->
+    <div class="max-w-6xl mx-auto w-full space-y-6">
+        
+        <!-- HEADER / TOP BAR (Matching UI Screenshot 1) -->
+        <header class="neon-pill-gradient rounded-full px-6 py-3 flex items-center justify-between text-sm md:text-base font-bold transition-all">
+            <!-- Brand Logo -->
+            <div class="flex items-center space-x-2">
+                <span class="text-neon-yellow text-xl md:text-2xl tracking-wide font-black">Three<span class="text-neon-magenta">R</span></span>
+            </div>
+
+            <!-- Tagline / Sub-brand -->
+            <div class="hidden sm:flex items-center space-x-2 text-neon-pink font-semibold tracking-wider text-sm md:text-base">
+                <span>Racikan</span>
+                <span class="text-white font-black">•</span>
+                <span>Ramuan</span>
+                <span class="text-white font-black">•</span>
+                <span>Rahma</span>
+            </div>
+
+            <!-- Cart Trigger Button -->
+            <button onclick="toggleCartModal()" class="relative bg-zinc-900 border border-zinc-700 hover:border-neon-yellow text-white px-4 py-1.5 rounded-full flex items-center space-x-2 transition-all">
+                <i class="fa-solid fa-cart-shopping text-neon-yellow"></i>
+                <span class="font-bold text-xs md:text-sm">Keranjang</span>
+                <span id="cart-badge" class="bg-neon-magenta text-white text-xs px-2 py-0.5 rounded-full font-black">0</span>
+            </button>
+        </header>
+
+        <!-- HERO BANNER (Matching UI Screenshot 1) -->
+        <section class="neon-pill-gradient rounded-full py-5 px-6 text-center shadow-2xl">
+            <h1 class="text-xl sm:text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-neon-pink via-neon-yellow to-neon-magenta bg-clip-text text-transparent">
+                Pengen minuman sehat tapi kekinian?
+            </h1>
+        </section>
+
+        <!-- PRODUCT CATALOG GRID -->
+        <main class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+            
+            <!-- PRODUCT 1: RIMPANG (Yellow Theme) -->
+            <div class="card-yellow bg-dark-card rounded-3xl p-4 flex flex-col justify-between">
+                <div>
+                    <!-- Product Canvas / Image Container -->
+                    <div class="relative bg-amber-950/40 rounded-2xl p-4 overflow-hidden h-72 flex items-center justify-center border border-amber-800/30">
+                        <!-- Custom Artistic Typography Background -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-25 select-none">
+                            <span class="text-7xl font-black text-amber-500 tracking-tighter leading-none text-center">
+                                RIM<br>PANG
+                            </span>
+                        </div>
+                        <!-- Bottle Product Image -->
+                        <img src="foto/rimpang.jpeg" 
+                             alt="Rimpang Drink" [0_10px_20px_rgba(245,158,11,0.5)] transform hover:scale-105 transition-transform duration-300">
+                    </div>
+
+                    <!-- Title -->
+                    <h2 class="text-center text-xl font-black text-white mt-4 uppercase tracking-wider">
+                        RIMPANG
+                    </h2>
+                    <p class="text-center text-xs text-amber-400 font-medium mt-1">Rp 18.000</p>
+                </div>
+
+                <!-- Card Actions (Matching UI) -->
+                <div class="flex items-center space-x-2 mt-4">
+                    <button onclick="openDetailModal('rimpang')" class="flex-1 bg-neon-yellow hover:bg-yellow-400 text-black font-extrabold py-2 px-3 rounded-full text-xs md:text-sm tracking-wider uppercase transition-colors">
+                        READ DESCRIPTION
+                    </button>
+                    <button onclick="openOrderModal('rimpang')" class="bg-zinc-900 border-2 border-neon-yellow hover:bg-neon-yellow hover:text-black text-neon-yellow font-extrabold px-3 py-2 rounded-full flex items-center space-x-1 text-xs md:text-sm transition-all">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>1</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PRODUCT 2: TELANG (Purple/Magenta Theme) -->
+            <div class="card-pink bg-dark-card rounded-3xl p-4 flex flex-col justify-between">
+                <div>
+                    <!-- Product Canvas / Image Container -->
+                    <div class="relative bg-purple-950/40 rounded-2xl p-4 overflow-hidden h-72 flex items-center justify-center border border-purple-800/30">
+                        <!-- Custom Artistic Typography Background -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-25 select-none">
+                            <span class="text-6xl font-black text-purple-400 tracking-tighter leading-none text-center">
+                                BUNGA<br>TELANG
+                            </span>
+                        </div>
+                        <!-- Bottle Product Image -->
+                        <img src="foto/telang.jpeg" 
+                             alt="Bunga Telang Drink" [0_10px_20px_rgba(217,70,239,0.5)] transform hover:scale-105 transition-transform duration-300">
+                    </div>
+
+                    <!-- Title -->
+                    <h2 class="text-center text-xl font-black text-white mt-4 uppercase tracking-wider">
+                        TELANG
+                    </h2>
+                    <p class="text-center text-xs text-purple-400 font-medium mt-1">Rp 18.000</p>
+                </div>
+
+                <!-- Card Actions (Matching UI) -->
+                <div class="flex items-center space-x-2 mt-4">
+                    <button onclick="openDetailModal('telang')" class="flex-1 bg-neon-magenta hover:bg-fuchsia-600 text-white font-extrabold py-2 px-3 rounded-full text-xs md:text-sm tracking-wider uppercase transition-colors">
+                        READ DESCRIPTION
+                    </button>
+                    <button onclick="openOrderModal('telang')" class="bg-zinc-900 border-2 border-neon-magenta hover:bg-neon-magenta hover:text-white text-neon-magenta font-extrabold px-3 py-2 rounded-full flex items-center space-x-1 text-xs md:text-sm transition-all">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>1</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="text-center text-xs text-zinc-500 py-4 border-t border-zinc-900">
+            <p>© 2026 ThreeR Store • Racikan Ramuan Rahma • All rights reserved.</p>
+        </footer>
+    </div>
+
+
+    <!-- ================= MODALS & OVERLAYS ================= -->
+
+    <!-- 1. ORDER POPUP MODAL (Matching UI Screenshot 2: Desktop - 2 & Desktop - 3) -->
+    <div id="orderModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-blur">
+        <div id="orderCardContainer" class="bg-dark-card rounded-3xl p-5 max-w-sm w-full relative transition-all transform scale-95 opacity-0">
+            <!-- Close Button -->
+            <button onclick="closeOrderModal()" class="absolute top-3 right-3 text-zinc-400 hover:text-white bg-zinc-800/80 w-8 h-8 rounded-full flex items-center justify-center z-20">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Product Card Display inside Modal -->
+            <div id="modalProductCanvas" class="relative rounded-2xl p-4 overflow-hidden h-72 flex items-center justify-center border">
+                <div id="modalProductBgText" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-25 select-none font-black text-6xl text-center leading-none">
+                </div>
+                <img id="modalProductImg" src="" alt="Selected Drink" class="relative z-10 h-60 object-contain drop-shadow-xl">
+            </div>
+
+            <!-- Title: Tambah Pesanan -->
+            <h3 class="text-center text-xs font-bold text-white mt-4 uppercase tracking-widest" id="modalTambahTitle">
+                Tambah Pesanan
+            </h3>
+
+            <!-- Interactive Counter Box (Matching Image 2 UI) -->
+            <div id="counterBox" class="bg-zinc-900 rounded-full py-2 px-4 flex items-center justify-between border my-3">
+                <button onclick="changeQuantity(-1)" class="w-8 h-8 rounded-full flex items-center justify-center font-black text-lg transition-transform active:scale-90" id="btnMinus">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <span id="orderQuantity" class="text-xl font-black text-white">1</span>
+                <button onclick="changeQuantity(1)" class="w-8 h-8 rounded-full flex items-center justify-center font-black text-lg transition-transform active:scale-90" id="btnPlus">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+
+            <!-- Pesan Sekarang / Tambah Keranjang Button -->
+            <button id="modalSubmitBtn" onclick="addToCartFromModal()" class="w-full font-black py-3 rounded-full text-center uppercase tracking-wider text-sm transition-all shadow-lg active:scale-95">
+                PESAN SEKARANG
+            </button>
+        </div>
+    </div>
+
+
+    <!-- 2. PRODUCT DESCRIPTION DETAIL MODAL -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-blur">
+        <div class="bg-zinc-900 border-2 border-zinc-700 rounded-3xl p-6 max-w-md w-full relative">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white bg-zinc-800 w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 id="detailTitle" class="text-2xl font-black text-neon-yellow mb-2">
+                DETAIL PRODUK
+            </h3>
+            <p id="detailCategory" class="text-xs text-zinc-400 uppercase font-bold tracking-widest mb-4">
+                Racikan Sehat Kekinian
+            </p>
+
+            <div class="space-y-3 text-sm text-zinc-300">
+                <div>
+                    <h4 class="font-bold text-white">Komposisi:</h4>
+                    <p id="detailIngredients" class="text-xs text-zinc-400"></p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white">Khasiat & Manfaat:</h4>
+                    <p id="detailBenefits" class="text-xs text-zinc-400"></p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white">Harga:</h4>
+                    <p id="detailPrice" class="text-base font-black text-neon-yellow"></p>
+                </div>
+            </div>
+
+            <button onclick="closeDetailModal()" class="w-full mt-6 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-2.5 rounded-full text-xs uppercase tracking-wider">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+
+    <!-- 3. SHOPPING CART & EMAIL CHECKOUT SLIDE-OVER / MODAL -->
+    <div id="cartModal" class="fixed inset-0 z-50 hidden flex items-center justify-end modal-blur">
+        <div class="bg-zinc-950 border-l border-zinc-800 w-full max-w-md h-full flex flex-col justify-between p-6 overflow-y-auto">
+            <div>
+                <!-- Header -->
+                <div class="flex items-center justify-between pb-4 border-b border-zinc-800">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-bag-shopping text-neon-yellow text-xl"></i>
+                        <h3 class="text-lg font-black text-white uppercase tracking-wider">Keranjang Pesanan</h3>
+                    </div>
+                    <button onclick="toggleCartModal()" class="text-zinc-400 hover:text-white text-lg">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Item List -->
+                <div id="cartItemsList" class="py-4 space-y-3">
+                    <!-- Items rendered dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Order Form & Checkout Section -->
+            <div id="cartCheckoutSection" class="pt-4 border-t border-zinc-800 space-y-4">
+                <div class="flex justify-between items-center text-sm font-bold">
+                    <span class="text-zinc-400">Total Pembayaran:</span>
+                    <span id="cartTotalPrice" class="text-xl font-black text-neon-yellow">Rp 0</span>
+                </div>
+
+                <!-- Customer Details Form -->
+                <form id="checkoutForm" onsubmit="handleCheckout(event)" class="space-y-3 text-xs">
+                    <div>
+                        <label class="block text-zinc-400 mb-1 font-semibold">Nama Pemesan *</label>
+                        <input type="text" id="custName" required placeholder="Contoh: Rahma" 
+                               class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-neon-yellow">
+                    </div>
+                    <div>
+                        <label class="block text-zinc-400 mb-1 font-semibold">Nomor WhatsApp *</label>
+                        <input type="tel" id="custPhone" required placeholder="081234567890" 
+                               class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-neon-yellow">
+                    </div>
+                    <div>
+                        <label class="block text-zinc-400 mb-1 font-semibold">Alamat Pengiriman / Catatan</label>
+                        <textarea id="custAddress" rows="2" placeholder="Masukkan alamat lengkap atau catatan varian rasa..." 
+                                  class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-neon-yellow"></textarea>
+                    </div>
+
+                    <!-- Target Email Info -->
+                    <div class="bg-zinc-900/80 p-2.5 rounded-lg border border-zinc-800 text-[11px] text-zinc-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-envelope text-neon-yellow"></i>
+                        <span>Pesanan dikirim langsung ke: <strong class="text-white">three3r@gmail.com</strong></span>
+                    </div>
+
+                    <!-- Submit Actions -->
+                    <button type="submit" class="w-full bg-neon-yellow hover:bg-yellow-400 text-black font-extrabold py-3 rounded-full uppercase tracking-wider text-xs flex items-center justify-center space-x-2 shadow-lg">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Kirim Pesanan Ke Email</span>
+                    </button>
+                    
+                    <button type="button" onclick="checkoutViaWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-2.5 rounded-full uppercase tracking-wider text-xs flex items-center justify-center space-x-2">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>Pesan via WhatsApp (Alternatif)</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- DATA STORE ---
+        const PRODUCTS = {
+            rimpang: {
+                id: 'rimpang',
+                name: 'RIMPANG',
+                price: '7.000',
+                bgText: 'RIM<br>PANG',
+                colorTheme: 'yellow', // matches yellow styling
+                img: 'foto/rimpang.jpeg',
+                ingredients: 'Jahe merah, kunyit, temulawak, serai, kayu manis, madu murni.',
+                benefits: 'Meningkatkan daya tahan tubuh, meredakan inflamasi, melancarkan pencernaan, dan menyegarkan tubuh.'
+            },
+            telang: {
+                id: 'telang',
+                name: 'TELANG',
+                price: '7.000',
+                bgText: 'BUNGA<br>TELANG',
+                colorTheme: 'pink', // matches pink/purple styling
+                img: 'foto/telang.jpeg',
+                ingredients: 'Ekstrak Bunga Telang segar, lemon/jeruk nipis, sirup alami, mint.',
+                benefits: 'Kaya antioksidan, membantu meredakan stres, menjaga kesehatan mata, dan mempercantik kulit.'
+            },
+        };
+
+        // State Management
+        let cart = [];
+        let currentModalProductId = null;
+        let currentQuantity = 1;
+
+        // --- ORDER MODAL LOGIC (Matching Screenshot 2 UI) ---
+        function openOrderModal(productId) {
+            const product = PRODUCTS[productId];
+            if (!product) return;
+
+            currentModalProductId = productId;
+            currentQuantity = 1;
+            updateQuantityDisplay();
+
+            const modal = document.getElementById('orderModal');
+            const container = document.getElementById('orderCardContainer');
+            const canvas = document.getElementById('modalProductCanvas');
+            const bgText = document.getElementById('modalProductBgText');
+            const img = document.getElementById('modalProductImg');
+            const btnPlus = document.getElementById('btnPlus');
+            const btnSubmit = document.getElementById('modalSubmitBtn');
+
+            // Apply Theme-Specific Styling (Yellow vs Pink/Magenta)
+            if (product.colorTheme === 'yellow') {
+                container.className = "bg-dark-card rounded-3xl p-5 max-w-sm w-full relative transition-all card-yellow";
+                canvas.className = "relative rounded-2xl p-4 overflow-hidden h-72 flex items-center justify-center border border-amber-800/30 bg-amber-950/40";
+                bgText.className = "absolute inset-0 flex items-center justify-center pointer-events-none opacity-25 select-none font-black text-6xl text-center leading-none text-amber-500";
+                btnPlus.className = "w-8 h-8 rounded-full flex items-center justify-center font-black text-lg bg-neon-yellow text-black";
+                btnSubmit.className = "w-full font-black py-3 rounded-full text-center uppercase tracking-wider text-sm transition-all shadow-lg active:scale-95 bg-neon-yellow hover:bg-yellow-400 text-black";
+            } else {
+                container.className = "bg-dark-card rounded-3xl p-5 max-w-sm w-full relative transition-all card-pink";
+                canvas.className = "relative rounded-2xl p-4 overflow-hidden h-72 flex items-center justify-center border border-purple-800/30 bg-purple-950/40";
+                bgText.className = "absolute inset-0 flex items-center justify-center pointer-events-none opacity-25 select-none font-black text-6xl text-center leading-none text-purple-400";
+                btnPlus.className = "w-8 h-8 rounded-full flex items-center justify-center font-black text-lg bg-neon-magenta text-white";
+                btnSubmit.className = "w-full font-black py-3 rounded-full text-center uppercase tracking-wider text-sm transition-all shadow-lg active:scale-95 bg-neon-magenta hover:bg-fuchsia-600 text-white";
+            }
+
+            bgText.innerHTML = product.bgText;
+            img.src = product.img;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                container.classList.remove('scale-95', 'opacity-0');
+                container.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeOrderModal() {
+            const modal = document.getElementById('orderModal');
+            const container = document.getElementById('orderCardContainer');
+            
+            container.classList.remove('scale-100', 'opacity-100');
+            container.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function changeQuantity(amount) {
+            currentQuantity += amount;
+            if (currentQuantity < 1) currentQuantity = 1;
+            updateQuantityDisplay();
+        }
+
+        function updateQuantityDisplay() {
+            document.getElementById('orderQuantity').textContent = currentQuantity;
+        }
+
+        // --- CART LOGIC ---
+        function addToCartFromModal() {
+            if (!currentModalProductId) return;
+            const product = PRODUCTS[currentModalProductId];
+
+            const existingItem = cart.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity += currentQuantity;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: currentQuantity,
+                    img: product.img
+                });
+            }
+
+            closeOrderModal();
+            updateCartUI();
+            toggleCartModal(); // Open cart to show updated state
+        }
+
+        function updateCartQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const cartItemsList = document.getElementById('cartItemsList');
+            const cartTotalPrice = document.getElementById('cartTotalPrice');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            badge.textContent = totalItems;
+            cartTotalPrice.textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = `
+                    <div class="text-center py-10 text-zinc-500">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-2 text-zinc-700"></i>
+                        <p class="text-sm">Keranjang masih kosong</p>
+                    </div>
+                `;
+                return;
+            }
+
+            cartItemsList.innerHTML = cart.map(item => `
+                <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-3 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.img}" alt="${item.name}" class="w-12 h-12 object-contain bg-zinc-950 rounded-xl p-1">
+                        <div>
+                            <h4 class="font-extrabold text-white text-sm">${item.name}</h4>
+                            <p class="text-xs text-neon-yellow font-bold">Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-zinc-950 px-2 py-1 rounded-full border border-zinc-800">
+                        <button onclick="updateCartQuantity('${item.id}', -1)" class="w-6 h-6 rounded-full text-xs font-bold bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center">
+                            -
+                        </button>
+                        <span class="text-xs font-bold w-4 text-center">${item.quantity}</span>
+                        <button onclick="updateCartQuantity('${item.id}', 1)" class="w-6 h-6 rounded-full text-xs font-bold bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center">
+                            +
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('hidden');
+        }
+
+        // --- PRODUCT DETAIL MODAL LOGIC ---
+        function openDetailModal(productId) {
+            const product = PRODUCTS[productId];
+            if (!product) return;
+
+            document.getElementById('detailTitle').textContent = product.name;
+            document.getElementById('detailIngredients').textContent = product.ingredients;
+            document.getElementById('detailBenefits').textContent = product.benefits;
+            document.getElementById('detailPrice').textContent = `Rp ${product.price.toLocaleString('id-ID')}`;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        // --- CHECKOUT & EMAIL LOGIC ---
+        function handleCheckout(event) {
+            event.preventDefault();
+
+            if (cart.length === 0) {
+                alert('Keranjang Anda masih kosong. Silakan pilih produk terlebih dahulu.');
+                return;
+            }
+
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const address = document.getElementById('custAddress').value || '-';
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            // Format Order Summary Text
+            let itemsSummary = cart.map(item => `- ${item.name} x${item.quantity} (Rp ${(item.price * item.quantity).toLocaleString('id-ID')})`).join('\n');
+
+            const emailSubject = encodeURIComponent(`[PESANAN BARU THREER] - ${name}`);
+            const emailBody = encodeURIComponent(
+                `Halo Admin ThreeR,\n\nAda pesanan baru dari website:\n\n` +
+                `--- DETAIL PEMESAN ---\n` +
+                `Nama: ${name}\n` +
+                `No. WhatsApp: ${phone}\n` +
+                `Alamat / Catatan: ${address}\n\n` +
+                `--- DAFTAR PESANAN ---\n` +
+                `${itemsSummary}\n\n` +
+                `TOTAL PEMBAYARAN: Rp ${totalPrice.toLocaleString('id-ID')}\n\n` +
+                `Mohon segera diproses pesanan ini. Terima kasih!`
+            );
+
+            // Trigger mailto link targeted to three3r@gmail.com
+            const mailtoUrl = `mailto:three3r@gmail.com?subject=${emailSubject}&body=${emailBody}`;
+            
+            window.location.href = mailtoUrl;
+
+            alert(`Terima kasih ${name}! Aplikasi email Anda akan terbuka untuk mengirimkan detail pesanan ke three3r@gmail.com.`);
+            
+            // Clear Cart after ordering
+            cart = [];
+            updateCartUI();
+            toggleCartModal();
+        }
+
+        // Fallback option via WhatsApp
+        function checkoutViaWhatsApp() {
+            if (cart.length === 0) {
+                alert('Keranjang Anda masih kosong.');
+                return;
+            }
+
+            const name = document.getElementById('custName').value || 'Pelanggan';
+            const phone = document.getElementById('custPhone').value || '-';
+            const address = document.getElementById('custAddress').value || '-';
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            let itemsSummary = cart.map(item => `- ${item.name} x${item.quantity} (Rp ${(item.price * item.quantity).toLocaleString('id-ID')})`).join('%0A');
+
+            const waText = `Halo%20ThreeR,%20saya%20ingin%20memesan:%0A%0A${itemsSummary}%0A%0ATotal:%20Rp%20${totalPrice.toLocaleString('id-ID')}%0A%0A*Data%20Pemesan:*%0ANama:%20${encodeURIComponent(name)}%0ANo.WA:%20${encodeURIComponent(phone)}%0AAlamat/Catatan:%20${encodeURIComponent(address)}`;
+
+            window.open(`https://wa.me/?text=${waText}`, '_blank');
+        }
+
+        // Close Modals on Outer Click
+        window.onclick = function(event) {
+            const orderModal = document.getElementById('orderModal');
+            const detailModal = document.getElementById('detailModal');
+            if (event.target === orderModal) closeOrderModal();
+            if (event.target === detailModal) closeDetailModal();
+        }
+    </script>
+</body>
+</html>

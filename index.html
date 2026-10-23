@@ -332,12 +332,12 @@
                 <form id="checkoutForm" onsubmit="handleCheckout(event)" class="space-y-3 text-xs">
                     <div>
                         <label class="block text-zinc-400 mb-1 font-semibold">Nama Pemesan *</label>
-                        <input type="text" id="custName" required placeholder="Contoh: Rahma" 
+                        <input type="text" id="custName" required placeholder="Isi nama anda" 
                                class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-neon-yellow">
                     </div>
                     <div>
                         <label class="block text-zinc-400 mb-1 font-semibold">Nomor WhatsApp *</label>
-                        <input type="tel" id="custPhone" required placeholder="081281581986" 
+                        <input type="tel" id="custPhone" required placeholder="08*****" 
                                class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-neon-yellow">
                     </div>
                     <div>
@@ -621,7 +621,7 @@
 
             const waText = `Halo%20ThreeR,%20saya%20ingin%20memesan:%0A%0A${itemsSummary}%0A%0ATotal:%20Rp%20${totalPrice.toLocaleString('id-ID')}%0A%0A*Data%20Pemesan:*%0ANama:%20${encodeURIComponent(name)}%0ANo.WA:%20${encodeURIComponent(phone)}%0AAlamat/Catatan:%20${encodeURIComponent(address)}`;
 
-            window.open(`https://wa.me/?text=${waText}`, '_blank');
+            window.open(`https://wa.me/081281581986=${waText}`, '_blank');
         }
 
         // Close Modals on Outer Click

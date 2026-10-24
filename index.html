@@ -377,20 +377,20 @@
                 name: 'RIMPANG',
                 price: '7.000',
                 bgText: 'RIM<br>PANG',
-                colorTheme: 'yellow', // matches yellow styling
+                colorTheme: 'yellow',
                 img: 'foto/rimpang.jpeg',
-                ingredients: 'Jahe merah, kunyit, temulawak, serai, kayu manis, madu murni.',
-                benefits: 'Meningkatkan daya tahan tubuh, meredakan inflamasi, melancarkan pencernaan, dan menyegarkan tubuh.'
+                ingredients: 'Jahe, Kunyit, Sereh, Lengkuas, Gula batu, Jeruk nipis.',
+                benefits: 'Meredakan nyeri sendi dan pegal linu, menjaga kesehatan fungsi hati (liver), meredakan asam lambung, serta mempercepat pemulihan tubuh pasca sakit atau kelelahan.'
             },
             telang: {
                 id: 'telang',
                 name: 'TELANG',
                 price: '7.000',
                 bgText: 'BUNGA<br>TELANG',
-                colorTheme: 'pink', // matches pink/purple styling
+                colorTheme: 'pink',
                 img: 'foto/telang.jpeg',
-                ingredients: 'Ekstrak Bunga Telang segar, lemon/jeruk nipis, sirup alami, mint.',
-                benefits: 'Kaya antioksidan, membantu meredakan stres, menjaga kesehatan mata, dan mempercantik kulit.'
+                ingredients: 'Bunga telang, Gula batu, Jeruk nipis.',
+                benefits: 'Menangkal radikal bebas dengan antioksidan tinggi, meningkatkan fungsi otak (memori), membantu menurunkan tekanan darah tinggi, serta memberikan efek relaksasi yang menenangkan pikiran.'
             },
         };
 
@@ -621,7 +621,7 @@
 
             const waText = `Halo%20ThreeR,%20saya%20ingin%20memesan:%0A%0A${itemsSummary}%0A%0ATotal:%20Rp%20${totalPrice.toLocaleString('id-ID')}%0A%0A*Data%20Pemesan:*%0ANama:%20${encodeURIComponent(name)}%0ANo.WA:%20${encodeURIComponent(phone)}%0AAlamat/Catatan:%20${encodeURIComponent(address)}`;
 
-            window.open(`https://wa.me/081281581986=${waText}`, '_blank');
+            window.open(`https://wa.me/6281281581986?text=${waText}`, '_blank');
         }
 
         // Close Modals on Outer Click
